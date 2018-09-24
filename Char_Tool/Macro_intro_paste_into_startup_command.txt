@@ -1,0 +1,100 @@
+// Charcoal Particle Measure Tool Intro
+//
+// This macro presents an intro screen and the option to automatically load the 
+// Charcoal Particle Measure Tool from the macros folder
+// 
+// Grant Snitker
+// Arizona State University
+// 2017
+
+       title = "Charcoal Particle Measure Tool";
+       width=512; height=512;
+       Dialog.create("Charcoal Particle Measure Tool");
+       Dialog.addMessage("Welcome to the Charcoal Particle Measure Tool for ImageJ.");
+       Dialog.addMessage("                Initiate live video feed for analysis?:");
+       items = newArray("Yes", "No and Exit");
+       Dialog.addChoice("                                 ", items, "Yes");
+       Dialog.show;
+       
+       choice1 = Dialog.getChoice();
+       
+       if (choice1 == "No and Exit"){
+     exit("Goodbye :(");
+}
+       if (choice1 == "Yes") {
+            doCommand("IJ webcam plugin");
+       
+       title = "Charcoal Particle Measure Tool";
+       width=512; height=512;
+       Dialog.create("Charcoal Particle Measure Tool");
+       Dialog.addMessage("Add visible scalebar to images?:");
+       items = newArray("Yes", "No");
+       Dialog.addChoice("                  ", items, "Yes");
+       Dialog.show;
+            
+       if (choice1 == "Yes") {
+       run("Scale Bar...", "width=1000 height=6 font=24 color=Green background=None location=[Lower Left] overlay");
+       }
+       
+       title = "Charcoal Particle Measure Tool";
+       width=512; height=512;
+       Dialog.create("Charcoal Particle Measure Tool");
+       Dialog.addMessage("Please select from the options below in order to initiate the macro:");
+       items = newArray("Install Macros and Set Measurements", "Install Macros Only", "Exit");
+       Dialog.addChoice("                    ", items, "Install Macros and Set Measurements");
+       Dialog.addCheckbox("Record morphotypes with CharTool", false)
+       Dialog.show;
+       
+       choice2 = Dialog.getChoice();
+       choice3 = Dialog.getCheckbox();
+       
+       if (choice3 == true) {
+       path = "install=/Applications/ImageJ/macros/Char_Tool/Charcoal_particle_analysis_tool.txt";
+       }
+       
+       if (choice3 == false) {
+       path = "install=/Applications/ImageJ/macros/Char_Tool/Charcoal_particle_analysis_tool_without_morphology.txt";
+       }
+       
+       
+       if (choice2 == "Install Macros and Set Measurements") {
+       run("Install...",
+           path);
+        setTool("line");
+        waitForUser("Set Scale", "Use Draw Line tool to select a known length\nClick OK when finished");
+
+        run("Set Scale...");
+        run("Set Measurements...", "area min perimeter bounding fit shape feret's redirect=None decimal=3");
+        title = "Charcoal Particle Measure Tool";
+        width=512; height=512;
+        Dialog.create("Charcoal Particle Measure Tool");
+        Dialog.addMessage("Press [C] for Magic Wand Tool");
+        Dialog.addMessage("Press [X] for Freehand Trace Tool");
+        Dialog.addMessage("Press [D] to Delete Last Measurement");
+        Dialog.addMessage("Press [Z] for Charcoal Particle Measure Tool");
+        Dialog.addMessage("Press [S] for Charcoal Morphology Flowchart");
+        Dialog.show;
+        }
+       
+       if (choice2 == "Install Macros Only") {
+       run("Install...",
+           path);
+               title = "Charcoal Particle Measure Tool";
+        width=512; height=512;
+        Dialog.create("Charcoal Particle Measure Tool");
+        Dialog.addMessage("Press [C] for Magic Wand Tool");
+        Dialog.addMessage("Press [X] for Freehand Trace Tool");
+        Dialog.addMessage("Press [D] to Delete Last Measurement");
+        Dialog.addMessage("Press [Z] for Charcoal Particle Measure Tool");
+        Dialog.addMessage("Press [S] for Charcoal Morphology Flowchart");
+        Dialog.show;
+       }
+     
+       if (choice2 == "Exit"){
+       exit("Goodbye :(");
+       }
+}
+
+
+
+     
