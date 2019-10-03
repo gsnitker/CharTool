@@ -1,0 +1,45 @@
+// Color Assessment Tool
+//
+// This text file contains all of the tools necessary to assess the mean RGB color values of 
+// a sediment sample using imageJ and a usb connected digital microscope
+//  
+// Grant Snitker
+// Arizona State University
+// gsnitker@asu.edu
+// 2019
+
+    macro "Assess Average RBG Color  [r]" {
+       Dialog.create("CharTool");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
+       Dialog.show;
+       
+     setRGBWeights(1, 0, 0);
+     List.setMeasurements; 
+     red = List.getValue("Mean");
+     setRGBWeights(0, 1, 0);
+     List.setMeasurements; 
+     green = List.getValue("Mean");
+     setRGBWeights(0, 0, 1);
+     List.setMeasurements; 
+     blue = List.getValue("Mean");
+     samplenum =  Dialog.getString();
+    
+     setResult("Sample", nResults, samplenum);
+     setResult("Red", nResults-1, red);
+     setResult("Green", nResults-1, green);    
+     setResult("Blue", nResults-1, blue);    
+     updateResults;
+        }
+
+    macro "Remove Last Measurement  [d]" {
+        IJ.deleteRows(nResults-1,nResults-1);
+         }
+
+    macro "Open Instructions  [h]" {
+       Dialog.create("CharTool");
+        Dialog.addMessage("Press [R] to enter sample number and measure mean RBG values");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [H] to see these instructions again.");
+       Dialog.show;
+        }
+    
