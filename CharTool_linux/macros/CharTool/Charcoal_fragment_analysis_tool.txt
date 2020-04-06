@@ -1,0 +1,126 @@
+// Charcoal Fragment Analysis Tool
+//
+// This text file contains all of the tools necessary to quantify charcoal fragments
+// using imageJ and a usb connected digital microscope
+//  
+// Grant Snitker
+// Department of Crop and Soil Sciences
+// School of Agricultural and Environmental Sciences
+// University of Georgia
+// grant.snitker@uga.edu
+// 2019
+
+var samplenum = "";
+var depths =  "";
+var date =  "";
+var analyst = "";
+var notes =  "";
+
+    macro "Open Wand Tool  [c]" {
+        setTool("wand"); 
+        }
+
+    macro "Open Freehand Trace Tool  [x]" {
+        setTool("freehand"); 
+        }
+
+    macro "Charcoal Particle Measure Tool [z]" {
+        run("Wand Tool...");
+         }
+     
+    var pmCmds = newMenu("Popup Menu",
+    newArray("Measure Fragment..."));
+
+    macro "Popup Menu" {
+      cmd = getArgument();
+	  if(isOpen("Results")) {
+      if (cmd=="Measure Fragment...") {
+           run("Measure");
+       // Create Rectangularity Metric
+        p = getResult("Perim.");
+        w = getResult("Width");
+        h = getResult("Height");
+        rect = p / ((w + h)*2);
+        setResult("Rect", nResults-1, rect);
+	    setResult("Sample", nResults-1, samplenum);
+	    setResult("Depths", nResults-1, depths);
+	    setResult("Date", nResults-1, date);
+	    setResult("Analyst", nResults-1, analyst);
+	    setResult("Other info", nResults-1, notes);
+        updateResults(); }}
+	else {
+	   Dialog.create("CharTool - Enter Metadata");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 20); 
+       Dialog.addString("      Date:", "Date of Analysis", 20); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 20); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 20); 
+       Dialog.show;
+       samplenum =  Dialog.getString();
+       depths =  Dialog.getString();
+       date =  Dialog.getString();
+       analyst =  Dialog.getString();
+       notes =  Dialog.getString();
+	   if (cmd=="Measure Fragment...") {
+           run("Measure");
+       // Create Rectangularity Metric
+        p = getResult("Perim.");
+        w = getResult("Width");
+        h = getResult("Height");
+        rect = p / ((w + h)*2);
+        setResult("Rect", nResults-1, rect);
+	    setResult("Sample", nResults-1, samplenum);
+	    setResult("Depths", nResults-1, depths);
+	    setResult("Date", nResults-1, date);
+	    setResult("Analyst", nResults-1, analyst);
+	    setResult("Other info", nResults-1, notes);
+        updateResults(); }
+		}
+        }
+     
+    macro "Remove Last Measurement  [d]" {
+        IJ.deleteRows(nResults-1,nResults-1);
+         }
+    
+     
+    macro "Enter Metadata  [n]" {
+       Dialog.create("CharTool");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 20); 
+       Dialog.addString("      Date:", "Date of Analysis", 20); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 20); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 200); 
+       Dialog.show;
+       samplenum =  Dialog.getString();
+       depths =  Dialog.getString();
+       date =  Dialog.getString();
+       analyst =  Dialog.getString();
+       notes =  Dialog.getString();
+}
+
+
+    macro "No Charcoal Found  [m]" {
+        run("Select All");
+        run("Measure");
+        setResult("Area", nResults, 0);
+        IJ.deleteRows(nResults-2,nResults-2);
+}
+    
+    macro "Open Instructions  [h]" {
+        Dialog.create("CharTool");
+        Dialog.addMessage("Press [C] for magic wand tool");
+        Dialog.addMessage("Press [X] for freehand trace tool");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [Z] to set edge-finding thresholds");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again.");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click or press [M] to measure a charcoal fragment");
+        Dialog.show;
+        }
+
+
+currentNResults = nResults;
+if (nResults == currentNResults) {  // if Analyze Particles did not find any particles
+    setResult("Label", nResults, getTitle());
+}

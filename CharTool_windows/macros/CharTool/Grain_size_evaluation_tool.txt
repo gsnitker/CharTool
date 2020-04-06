@@ -1,0 +1,98 @@
+// Grain size evaluation
+//
+// This text file contains all of the tools necessary to measure the grain sizes
+// in a sediment sample using imageJ and a usb connected digital microscope
+//  
+// Grant Snitker
+// Department of Crop and Soil Sciences
+// School of Agricultural and Environmental Sciences
+// University of Georgia
+// grant.snitker@uga.edu
+// 2019
+
+var samplenum = "";
+var depths =  "";
+var date =  "";
+var analyst = "";
+var notes =  "";
+    
+    macro "Evaluate Particle Size  [s]" {
+       Dialog.create("CharTool - Enter Metadata");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 20); 
+       Dialog.addString("      Date:", "Date of Analysis", 20); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 20); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 20); 
+       Dialog.show;
+       samplenum =  Dialog.getString();
+       depths =  Dialog.getString();
+       date =  Dialog.getString();
+       analyst =  Dialog.getString();
+       notes =  Dialog.getString();
+	
+	Dialog.create("Evaluate Particle Size");
+    Dialog.addMessage("Please Enter the Minimum \nNumber of Observations \nDesired to Evaluate Grain Size");
+    Dialog.addNumber("       Number of Obs:", 300); 
+    Dialog.show;
+ 
+    obsnum = Dialog.getNumber();
+    run("Duplicate...", "title=Grain_Evaluation");
+    run("8-bit");
+    run("Invert");
+    setAutoThreshold("MaxEntropy"); 
+    run("Threshold...");
+    waitForUser("Threshold set?");
+    selectWindow("Threshold"); 
+    run("Close"); 
+    run("Analyze Particles...", "size=4000-Infinity show=Overlay display exclude");
+    count = nResults(); 
+    selectWindow("Grain_Evaluation"); 
+    run("Close"); 
+    
+   
+    while (count<=obsnum) {
+    waitForUser("Select another region to evaluate");
+    run("Duplicate...", "title=Grain_Evaluation");
+    run("8-bit");
+    run("Invert");
+    setAutoThreshold("MaxEntropy"); 
+    run("Threshold...");
+    waitForUser("Threshold set?");
+    selectWindow("Threshold"); 
+    run("Close"); 
+    run("Analyze Particles...", "size=4000-Infinity show=Overlay display exclude");
+    setResult("Sample", nResults-1, samplenum);
+	setResult("Depths", nResults-1, depths);
+	setResult("Date", nResults-1, date);
+	setResult("Analyst", nResults-1, analyst);
+	setResult("Other info", nResults-1, notes);
+	count = nResults(); 
+    selectWindow("Grain_Evaluation"); 
+    run("Close"); 
+    }
+    waitForUser("Please close Results window and save observations");
+    }
+
+
+    macro "Remove Last Measurement  [d]" {
+        IJ.deleteRows(nResults-1,nResults-1);
+         }
+
+    macro "Open Instructions  [h]" {
+        Dialog.create("CharTool");
+        Dialog.addMessage("Press [S] to enter minimum number of samples required and evaluate particle size");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [H] to see these instructions again.");
+        Dialog.show;
+        }
+    
+
+
+
+
+
+
+
+
+
+
