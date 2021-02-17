@@ -10,10 +10,13 @@ For questions, please contact Dr. Grant Snitker via email (grant.snitker@uga.edu
 
 Please feel welcome to modify the code of any of these modules, but please cite CharTool and ImageJ when using them.
 
+
+
+
 CharTool Citation:
 
-Snitker, G., 2020. The Charcoal Quantification Tool (CharTool): A Suite of Open-source Tools for Quantifying Charcoal Fragments and Sediment Properties in Archaeological and Paleoecological Analysis. Ethnobiology Letters 11, 103–115. https://doi.org/10.14237/ebl.11.1.2020.1653
+Snitker, G., 2020. The Charcoal Quantification Tool (CharTool): A Suite of Open-source Tools for Quantifying Charcoal Fragments and Sediment Properties in Archaeological and Paleoecological Analysis. Ethnobiology Letters 11, 103–115. https://doi.org/10.14237/ebl.11.1.2020.1653.
 
 ImageJ Citation:
 
-Schneider, C. A., W. S. Rasband, and K. W. Eliceiri. 2012. NIH Image to ImageJ: 25 Years of Image Analysis. Nature Methods 9:671–675. DOI:10.1038/nmeth.2089.
+Schneider, C. A., W. S. Rasband, and K. W. Eliceiri. 2012. NIH Image to ImageJ: 25 Years of Image Analysis. Nature Methods 9:671–675. https://doi.org/10.1038/nmeth.2089.
