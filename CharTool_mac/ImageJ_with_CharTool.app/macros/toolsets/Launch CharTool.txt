@@ -15,11 +15,28 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
 
 // Choose Analysis
        macdir = getDirectory("macros");
+       call("ij.gui.ImageWindow.setNextLocation", screenHeight/1.5, screenWidth/10);
+       open(macdir + "CharTool/Welcome.png");
+       wait(4000);
+       while (nImages>0) { 
+          selectImage(nImages); 
+          close(); 
+      } 
+       
        Dialog.create("CharTool");
-       Dialog.addMessage("Welcome to CharTool: A Suite of Charcoal Quantification Tools for ImageJ.");       
-       Dialog.addMessage("      Please choose a procedure to perform from the options below:\n ");
+       Dialog.addMessage("Welcome to CharTool: A Suite of Charcoal Quantification Tools for ImageJ.");
+       Dialog.addMessage("                                              Version 3.1");       
+       Dialog.addMessage("               Please choose a module from the options below:\n ");
        items = newArray("Charcoal Fragment Quantification","Sample Color Assessment","Grain Size Evaluation");
-       Dialog.addChoice("                        ", items, "Charcoal Fragment Quantification");
+       Dialog.addChoice("                          ", items, "Charcoal Fragment Quantification");
+       Dialog.addMessage(" ");
+       Dialog.addMessage("   For more information, a suggested workflow, and to cite CharTool:");
+       Dialog.addMessage(" ");
+       Dialog.addMessage("Snitker, G., 2020. The Charcoal Quantification Tool (CharTool): A Suite");
+       Dialog.addMessage("of Open-source Tools for Quantifying Charcoal Fragments and Sediment"); 
+       Dialog.addMessage("Properties in Archaeological and Paleoecological Analysis. EBL 11,");
+       Dialog.addMessage("103–115. https://doi.org/10.14237/ebl.11.1.2020.1653");
+        
        Dialog.show;
 
 
@@ -27,17 +44,25 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
        if (choice1 == "Charcoal Fragment Quantification") {
 
 // Initiate microscope camera
+       Dialog.create("CharTool");
+       Dialog.addMessage("             Please select an input type.");
+       items = newArray("Live Video Feed from Microscope", "Still Image of Charcoal Sample");
+       Dialog.addChoice("       ", items, "Live Video Feed from Microscope");
+       Dialog.show;
 
+       choice00 = Dialog.getChoice();
+    
+       if (choice00 == "Live Video Feed from Microscope") {
        waitForUser("CharTool", "Connect to microscope?");
        doCommand("IJ webcam plugin");
 
        wait(6000);
        waitForUser("CharTool", "Click 'OK' when microscope is connected.");
-
+       
        Dialog.create("CharTool");
        Dialog.addMessage("Please select the Charcoal Fragment Quantification type below:");
        items = newArray("Without Morphotype Input Option", "With Morphotype Input Option");
-       Dialog.addChoice("                        ", items, "Without Morphotype Input Option");
+       Dialog.addChoice("                     ", items, "Without Morphotype Input Option");
        Dialog.show;
 
        choice = Dialog.getChoice();
@@ -80,14 +105,19 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
         Dialog.create("CharTool");
         Dialog.addMessage("Press [C] for magic wand tool");
         Dialog.addMessage("Press [X] for freehand trace tool");
-        Dialog.addMessage("Press [D] to delete last measurement");
-        Dialog.addMessage("Press [Z] to measure selected charcoal fragment");
-        Dialog.addMessage("Press [N] if no charcoal is found");
-        Dialog.addMessage("Press [H] to see these instructions again.");
+        Dialog.addMessage("Press [Z] to set edge-finding thresholds");
         Dialog.addMessage(" ");
-        Dialog.addMessage("Right click or press [M] to measure a charcoal fragment");
+        Dialog.addMessage("Press [A] to enter sample metadata");
+        Dialog.addMessage("Press [S] to open charcoal morphotype flowchart");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [M] to measure a charcoal fragment");
         Dialog.show;
         setTool("wand");
+        run("Wand Tool...", "tolerance=30 mode=8-connected smooth");
         }
        
        if (choice1a == "Install Macros Only") {
@@ -108,29 +138,154 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
        }
        if (choice1c == "No") {};
         
+       Dialog.create("CharTool");
+        Dialog.addMessage("Press [C] for magic wand tool");
+        Dialog.addMessage("Press [X] for freehand trace tool");
+        Dialog.addMessage("Press [Z] to set edge-finding thresholds");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [A] to enter sample metadata");
+        Dialog.addMessage("Press [S] to open charcoal morphotype flowchart");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [M] to measure a charcoal fragment");
+        Dialog.show;
+        setTool("wand");
+        run("Wand Tool...", "tolerance=30 mode=8-connected smooth");
+        }
+	 }
+       
+       
+       if (choice00 == "Still Image of Charcoal Sample") {
+       waitForUser("CharTool", "Open image file?");
+       open();
+
+       wait(2000);
+       waitForUser("CharTool", "Click 'OK' when image is loaded.");
+       
+       Dialog.create("CharTool");
+       Dialog.addMessage("Please select the Charcoal Fragment Quantification type below:");
+       items = newArray("Without Morphotype Input Option", "With Morphotype Input Option");
+       Dialog.addChoice("                     ", items, "Without Morphotype Input Option");
+       Dialog.show;
+
+       choice = Dialog.getChoice();
+       if (choice == "Without Morphotype Input Option") {
+       path1 = "install=" + macdir + "CharTool/Charcoal_fragment_analysis_tool.txt";}
+       if (choice == "With Morphotype Input Option") {
+       path1 = "install=" + macdir + "CharTool/Charcoal_fragment_analysis_tool_with_morphology.txt";}
+       
+
+       Dialog.create("CharTool");
+       Dialog.addMessage("Please select from the options below in order to initiate the macro:");
+       items = newArray("Install Macros and Set Scale", "Install Macros Only");
+       Dialog.addChoice("                        ", items, "Install Macros and Set Measurements");
+       Dialog.show;
+       
+       
+       choice1a = Dialog.getChoice();
+       if (choice1a == "Install Macros and Set Scale") {
+       run("Install...", path1);
+
+       setTool("line");
+       waitForUser("Set Scale", "Use Draw Line tool to select a known length\nClick OK when finished");
+
+       run("Set Scale...");
+       run("Set Measurements...", "area min perimeter bounding fit shape feret's redirect=None decimal=3");
+       
+       Dialog.create("CharTool");
+       Dialog.addMessage("Add visible scalebar to images?");
+       items = newArray("Yes", "No");
+       Dialog.addChoice("                  ", items, "Yes");
+       Dialog.show;
+            
+       choice1b = Dialog.getChoice();
+       if (choice1b == "Yes") {
+       run("Scale Bar...", "width=1000 height=6 font=16 color=Green background=None location=[Lower Left] overlay");
+       }
+        
+       if (choice1b == "No") {};
+
         Dialog.create("CharTool");
         Dialog.addMessage("Press [C] for magic wand tool");
         Dialog.addMessage("Press [X] for freehand trace tool");
-        Dialog.addMessage("Press [D] to delete last measurement");
         Dialog.addMessage("Press [Z] to set edge-finding thresholds");
-        Dialog.addMessage("Press [N] if no charcoal is found");
-        Dialog.addMessage("Press [H] to see these instructions again.");
         Dialog.addMessage(" ");
-        Dialog.addMessage("Right click or press [M] to measure a charcoal fragment");
+        Dialog.addMessage("Press [A] to enter sample metadata");
+        Dialog.addMessage("Press [S] to open charcoal morphotype flowchart");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage("Press [Q] to open another image for analysis.");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [M] to measure a charcoal fragment");
         Dialog.show;
         setTool("wand");
+        run("Wand Tool...", "tolerance=30 mode=8-connected smooth");
+        }
+       
+       if (choice1a == "Install Macros Only") {
+       run("Install...",path1);
+       
+       run("Set Measurements...", "area min perimeter bounding fit shape feret's redirect=None decimal=3");
+       
+
+       Dialog.create("CharTool");
+       Dialog.addMessage("Add visible scalebar to images?");
+       items = newArray("Yes", "No");
+       Dialog.addChoice("                  ", items, "Yes");
+       Dialog.show;
+        
+       choice1c = Dialog.getChoice();
+       if (choice1c == "Yes") {
+       run("Scale Bar...", "width=1000 height=6 font=16 color=Green background=None location=[Lower Left] overlay");
+       }
+       if (choice1c == "No") {};
+        
+       Dialog.create("CharTool");
+        Dialog.addMessage("Press [C] for magic wand tool");
+        Dialog.addMessage("Press [X] for freehand trace tool");
+        Dialog.addMessage("Press [Z] to set edge-finding thresholds");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [A] to enter sample metadata");
+        Dialog.addMessage("Press [S] to open charcoal morphotype flowchart");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage("Press [Q] to open another image for analysis.");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [M] to measure a charcoal fragment");
+        Dialog.show;
+        setTool("wand");
+        run("Wand Tool...", "tolerance=30 mode=8-connected smooth");
         }
 	 }
-	 
-     
+       
+       }
+       
 
        if (choice1 == "Sample Color Assessment") {
 // Initiate microscope camera       
+       Dialog.create("CharTool");
+       Dialog.addMessage("             Please select an input type.");
+       items = newArray("Live Video Feed from Microscope", "Still Image of Charcoal Sample");
+       Dialog.addChoice("       ", items, "Live Video Feed from Microscope");
+       Dialog.show;
+
+       choice00 = Dialog.getChoice();
+    
+       if (choice00 == "Live Video Feed from Microscope") {
        waitForUser("CharTool", "Connect to microscope?");
        doCommand("IJ webcam plugin");
-       run("Set Measurements...", " ");
-       wait(5000);
+
+       wait(6000);
        waitForUser("CharTool", "Click 'OK' when microscope is connected.");
+       
+             run("Set Measurements...", " ");
        path2 = "install=" + macdir + "CharTool/Color_assessment_tool.txt";
        run("Install...", path2);
        
@@ -139,7 +294,31 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
         Dialog.addMessage("Press [D] to delete last measurement");
         Dialog.addMessage("Press [H] to see these instructions again.");
         Dialog.show;
+        setTool("rectangle");       
+       }
+       
+       
+       if (choice00 == "Still Image of Charcoal Sample") {
+       waitForUser("CharTool", "Open image file?");
+       open();
+
+       wait(2000);
+       waitForUser("CharTool", "Click 'OK' when image is loaded.");
+       
+       run("Set Measurements...", " ");
+       path2 = "install=" + macdir + "CharTool/Color_assessment_tool.txt";
+       run("Install...", path2);
+       
+        Dialog.create("CharTool");
+        Dialog.addMessage("Press [R] to enter sample number and measure mean RBG values");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [H] to see these instructions again.");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [Q] to open another image for analysis.");
+
+        Dialog.show;
         setTool("rectangle");
+       } 
 }
 
       if (choice1 == "Grain Size Evaluation") {
@@ -183,6 +362,7 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
        Dialog.create("CharTool");
        Dialog.addMessage("Press [S] to enter minimum number of samples required and evaluate particle size");
        Dialog.addMessage("Press [D] to delete last measurement");
+       Dialog.addMessage("Press [W] to display the USGS Wentworth Scale Diagram.");
        Dialog.addMessage("Press [H] to see these instructions again.");
        Dialog.show;
        setTool("rectangle");
@@ -209,6 +389,7 @@ macro "Launch CharTool Action Tool - C000D5cD5dDa4Db5C000D3aC000D2aDd5C000D5aC00
         Dialog.create("CharTool");
         Dialog.addMessage("Press [S] to enter minimum number of samples required and evaluate particle size");
         Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [W] to display the USGS Wentworth Scale Diagram.");
         Dialog.addMessage("Press [H] to see these instructions again.");
         Dialog.show;
         setTool("rectangle");

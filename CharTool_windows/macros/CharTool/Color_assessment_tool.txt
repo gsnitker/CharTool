@@ -63,3 +63,8 @@ var notes =  "";
        Dialog.show;
         }
     
+
+  macro "Open New Image  [q]" {
+       waitForUser("CharTool", "Opening new image");
+       open();
+        }

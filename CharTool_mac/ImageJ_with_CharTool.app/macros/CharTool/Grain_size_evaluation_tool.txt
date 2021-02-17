@@ -30,6 +30,19 @@ var notes =  "";
        analyst =  Dialog.getString();
        notes =  Dialog.getString();
 	
+     //   setResult("Area", 0, 0);
+     //   setResult("Feret", 0, 0);
+     //   setResult("FeretX", 0, 0);
+     //   setResult("FeretY", 0, 0);
+     //   setResult("FeretAngle", 0, 0);
+     //   setResult("MinFeret", 0, 0);
+     //   setResult("Sample", 0, samplenum);
+    //	setResult("Depths", 0, depths);
+//	setResult("Date", 0, date);
+//	setResult("Analyst", 0, analyst);
+//	setResult("Other info", 0, notes);
+//        IJ.deleteRows(nResults-2,nResults-2);
+	
 	Dialog.create("Evaluate Particle Size");
     Dialog.addMessage("Please Enter the Minimum \nNumber of Observations \nDesired to Evaluate Grain Size");
     Dialog.addNumber("       Number of Obs:", 300); 
@@ -61,16 +74,21 @@ var notes =  "";
     selectWindow("Threshold"); 
     run("Close"); 
     run("Analyze Particles...", "size=4000-Infinity show=Overlay display exclude");
-    setResult("Sample", nResults-1, samplenum);
-	setResult("Depths", nResults-1, depths);
-	setResult("Date", nResults-1, date);
-	setResult("Analyst", nResults-1, analyst);
-	setResult("Other info", nResults-1, notes);
+    //setResult("Sample", nResults-1, samplenum);
+//	setResult("Depths", nResults-1, depths);
+//	setResult("Date", nResults-1, date);
+//	setResult("Analyst", nResults-1, analyst);
+//	setResult("Other info", nResults-1, notes);
 	count = nResults(); 
     selectWindow("Grain_Evaluation"); 
     run("Close"); 
     }
     waitForUser("Please close Results window and save observations");
+    setResult("Sample", nResults-1, samplenum);
+    setResult("Depths", nResults-1, depths);
+    setResult("Date", nResults-1, date);
+    setResult("Analyst", nResults-1, analyst);
+    setResult("Other info", nResults-1, notes);
     }
 
 
@@ -82,11 +100,16 @@ var notes =  "";
         Dialog.create("CharTool");
         Dialog.addMessage("Press [S] to enter minimum number of samples required and evaluate particle size");
         Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage("Press [W] to display the USGS Wentworth Scale Diagram.");
         Dialog.addMessage("Press [H] to see these instructions again.");
         Dialog.show;
         }
     
-
+    macro "Open USGS Wentworth Scale Diagram  [w]" {
+        dir = getDirectory("macros");
+        open(dir + "CharTool/USGS_wentworth_scale.png");
+        //setLocation(600,0,600,600); 
+         }
 
 
 

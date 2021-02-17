@@ -1,4 +1,4 @@
-// Charcoal Fragment Analysis Tool
+// Charcoal Fragment Analysis Tool v.2
 //
 // This text file contains all of the tools necessary to quantify charcoal fragments
 // using imageJ and a usb connected digital microscope
@@ -8,7 +8,7 @@
 // School of Agricultural and Environmental Sciences
 // University of Georgia
 // grant.snitker@uga.edu
-// 2019
+// 2021
 
 var samplenum = "";
 var depths =  "";
@@ -50,11 +50,11 @@ var notes =  "";
         updateResults(); }}
 		else {
 	   Dialog.create("CharTool - Enter Metadata");
-       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
-       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 20); 
-       Dialog.addString("      Date:", "Date of Analysis", 20); 
-       Dialog.addString("      Analyst:", "Analyst Name or Initials", 20); 
-       Dialog.addString("      Other Info:", "Other Pertinent Information", 20); 
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 23); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 23); 
+       Dialog.addString("      Date:", "Date of Analysis", 23); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 23); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 23); 
        Dialog.show;
        samplenum =  Dialog.getString();
        depths =  Dialog.getString();
@@ -123,17 +123,18 @@ var notes =  "";
          }
     
     macro "Open Charcoal Morphotype Flowchart  [s]" {
-        open("ImageJ/macros/Char_Tool/Morphotype_flowchart.png");
+        dir = getDirectory("macros");
+        open(dir + "CharTool/Morphotype_flowchart.png");
         setLocation(600,0,600,600); 
          }
      
-	macro "Enter Metadata  [n]" {
+	macro "Enter Metadata  [a]" {
        Dialog.create("CharTool");
-       Dialog.addString("      Sample Number:", "Enter Sample Number", 20); 
-       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 20); 
-       Dialog.addString("      Date:", "Date of Analysis", 20); 
-       Dialog.addString("      Analyst:", "Analyst Name or Initials", 20); 
-       Dialog.addString("      Other Info:", "Other Pertinent Information", 200); 
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 23); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 23); 
+       Dialog.addString("      Date:", "Date of Analysis", 23); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 23); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 23); 
        Dialog.show;
        samplenum =  Dialog.getString();
        depths =  Dialog.getString();
@@ -142,7 +143,7 @@ var notes =  "";
        notes =  Dialog.getString();
        }
 	 
-    macro "No Charcoal Found  [m]" {
+    macro "No Charcoal Found  [n]" {
         run("Select All");
         run("Measure");
         setResult("Area", nResults, 0);
@@ -153,15 +154,24 @@ var notes =  "";
         Dialog.create("CharTool");
         Dialog.addMessage("Press [C] for magic wand tool");
         Dialog.addMessage("Press [X] for freehand trace tool");
-        Dialog.addMessage("Press [D] to delete last measurement");
         Dialog.addMessage("Press [Z] to set edge-finding thresholds");
-        Dialog.addMessage("Press [N] if no charcoal is found");
-        Dialog.addMessage("Press [H] to see these instructions again.");
         Dialog.addMessage(" ");
-        Dialog.addMessage("Right click or press [M] to measure a charcoal fragment");
+        Dialog.addMessage("Press [A] to enter sample metadata");
+        Dialog.addMessage("Press [S] to open charcoal morphotype flowchart");
+        Dialog.addMessage("Press [D] to delete last measurement");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [N] if no charcoal is found");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [M] to measure a charcoal fragment");
         Dialog.show;
         }
 
+
+  macro "Open New Image  [q]" {
+       waitForUser("CharTool", "Opening new image");
+       open();
+        }
 
 currentNResults = nResults;
 if (nResults == currentNResults) {  // if Analyze Particles did not find any particles
