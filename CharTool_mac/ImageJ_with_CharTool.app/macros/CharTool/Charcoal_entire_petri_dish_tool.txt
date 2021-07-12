@@ -1,0 +1,169 @@
+xcz// Charcoal Entire Petri Dish Tool
+//
+// This text file contains all of the tools necessary to quantify charcoal fragments in an entire petri dish
+// using imageJ and a usb connected digital microscope
+//  
+// Grant Snitker
+// USDA Forest Service, Southern Resrach Station, Athens, GA
+// Deprtment of Anthropology
+// University of Georgia, Athens, GA
+// grant.snitker@uga.edu
+// 2021
+
+var samplenum = "";
+var depths =  "";
+var date =  "";
+var analyst = "";
+var notes =  "";
+
+    macro "Set Polygon Selection Tool  [x]" {
+        setTool("polygon");
+        }
+
+    macro "Set Oval Selection Tool  [c]" {
+        setTool("oval"); 
+        }
+
+    macro "Convert to 8-bit image, set threshold, and measure all fragments [z]" {
+    // Enter Metadata
+        Dialog.create("CharTool");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 23); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 23); 
+       Dialog.addString("      Date:", "Date of Analysis", 23); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 23); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 23); 
+       Dialog.show;
+       samplenum =  Dialog.getString();
+       depths =  Dialog.getString();
+       date =  Dialog.getString();
+       analyst =  Dialog.getString();
+       notes =  Dialog.getString();
+    
+    // Get Selection
+        run("ROI Manager...");
+        roiManager("Add");
+    
+    // run 8-bit, binary threshold, and analyze particles
+        run("8-bit");
+        setThreshold(0, 120);
+        setOption("BlackBackground", false);
+        run("Convert to Mask");
+        roiManager("Select", 0);
+        run("Analyze Particles...", "  show=[Overlay Masks] display");
+    
+    // create ractangualrity measuremnet, access metadata, and add all to results table
+        for (i=0; i<nResults; i++) {
+        p = getResult("Perim.", i);
+        w = getResult("Width", i);
+        h = getResult("Height", i);
+        rect = p / ((w + h)*2);
+        setResult("Rect", i, rect);
+	    setResult("Sample", i, samplenum);
+	    setResult("Depths", i, depths);
+	    setResult("Date", i, date);
+	    setResult("Analyst", i, analyst);
+	    setResult("Other info", i, notes);
+        updateResults();
+    }
+    // delete selectiona nd close roi manager
+    roiManager("Select", 0);
+    roiManager("Delete");
+    selectWindow("ROI Manager");
+    run("Close");
+             }
+     
+    macro "Open New Image [q]" {
+       waitForUser("CharTool", "Opening new image");
+       open();
+        }
+     
+     
+    var pmCmds = newMenu("Popup Menu",
+    newArray("Analyze petri dish..."));
+
+    macro "Popup Menu" {
+      cmd = getArgument();
+      if (cmd=="Analyze petri dish...") {
+          // Enter Metadata
+        Dialog.create("CharTool");
+       Dialog.addString("      Sample Number:", "Enter Sample Number", 23); 
+       Dialog.addString("      Depth Range (cm):", "Enter Depth Range", 23); 
+       Dialog.addString("      Date:", "Date of Analysis", 23); 
+       Dialog.addString("      Analyst:", "Analyst Name or Initials", 23); 
+       Dialog.addString("      Other Info:", "Other Pertinent Information", 23); 
+       Dialog.show;
+       samplenum =  Dialog.getString();
+       depths =  Dialog.getString();
+       date =  Dialog.getString();
+       analyst =  Dialog.getString();
+       notes =  Dialog.getString();
+    
+    // Get Selection
+        run("ROI Manager...");
+        roiManager("Add");
+    
+    // run 8-bit, binary threshold, and analyze particles
+        run("8-bit");
+        setThreshold(0, 120);
+        setOption("BlackBackground", false);
+        run("Convert to Mask");
+        roiManager("Select", 0);
+        run("Analyze Particles...", "  show=[Overlay Masks] display");
+    
+    // create ractangualrity measuremnet, access metadata, and add all to results table
+        for (i=0; i<nResults; i++) {
+        p = getResult("Perim.", i);
+        w = getResult("Width", i);
+        h = getResult("Height", i);
+        rect = p / ((w + h)*2);
+        setResult("Rect", i, rect);
+	    setResult("Sample", i, samplenum);
+	    setResult("Depths", i, depths);
+	    setResult("Date", i, date);
+	    setResult("Analyst", i, analyst);
+	    setResult("Other info", i, notes);
+        updateResults();
+    }
+    // delete selectiona nd close roi manager
+    roiManager("Select", 0);
+    roiManager("Delete");
+    selectWindow("ROI Manager");
+    run("Close");
+        }}
+     
+    
+    macro "Open Instructions  [h]" {
+        Dialog.create("CharTool");
+        Dialog.addMessage("Press [X] to use the Polygon Selection Tool");
+        Dialog.addMessage("Press [C] to use the Oval Selection Tool");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Press [Q] to open a new image");
+        Dialog.addMessage("Press [W] to reset scale");
+        Dialog.addMessage("Press [H] to see these instructions again");
+        Dialog.addMessage(" ");
+        Dialog.addMessage("Right click (default) or press [Z] to measure all charcoal in the petri dish");
+        Dialog.show;
+        }
+    
+    
+ macro "Reset scale [w]" {
+        setTool("line");
+       waitForUser("Set Scale", "Use Draw Line tool to select a known length\nClick OK when finished");
+       run("Set Scale...");
+       Dialog.create("CharTool");
+       Dialog.addMessage("Add visible scale bar to images?");
+       items = newArray("Yes", "No");
+       Dialog.addChoice("                  ", items, "Yes");
+       Dialog.show;
+       choice1c = Dialog.getChoice();
+       if (choice1c == "Yes") {
+       
+        Dialog.create("CharTool");
+       Dialog.addString("Length of scale bar", "length in units", 15); 
+        Dialog.show;
+       scalebar =  Dialog.getString();
+       
+       run("Scale Bar...", "width=scalebar height=6 font=16 color=Green background=None location=[Lower Left] overlay");
+       }
+       if (choice1c == "No") {};
+        }

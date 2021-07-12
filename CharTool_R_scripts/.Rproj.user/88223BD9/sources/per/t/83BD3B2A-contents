@@ -1,0 +1,69 @@
+# Boxplots for maps
+
+# Load data
+library(ggplot2)
+library(RColorBrewer)
+library(cowplot)
+prcp.storage.anti = read.csv("/Users/grantsnitker/Desktop/anticor_matser_dataset_boxplots.csv")
+wild.data = read.csv("/Users/grantsnitker/Desktop/wild_matser_dataset_boxplots.csv")
+
+anticor.neg.l = ggplot(prcp.storage.anti, aes(x=factor(Period), y=anti.neg,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\nTransformation Period", y = "Negative Anticorrelation\n", title = "e", fill = "Sites in All Graphs") + scale_y_continuous(limits = c(0,.08)) + scale_x_discrete(labels=c("0901_1000" = "AD 900 - 1000","1001_1200" = "AD 1001 - 1200","1201_1300" = "AD 1201 - 1300","1301_1400" = "AD 1301 - 1400", "1401_1540" = "AD 1401 - 1540")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 6), axis.title = element_text(size  = 8), legend.text = element_text(size = 12), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"), legend.position = c(0.2, 0.8), legend.title.align=0.5,plot.title = element_text(face = "bold")) + guides(fill=guide_legend(nrow=3,byrow=TRUE))
+anticor.neg.l
+
+legend = get_legend(anticor.neg.l)
+
+jpeg("/Users/grantsnitker/Desktop/LTVTP_composite_graphs_legend.jpeg", width = 11.5, height = 16, units = 'in', res = 300)
+plot_grid(legend, nrow = 1, align = "v")
+dev.off()
+
+
+anticor.neg = ggplot(prcp.storage.anti, aes(x=factor(Period), y=anti.neg,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\nTransformation Period", y = "Negative Anticorrelation\n", title = "e) Negative Anticorrelation Values") + scale_y_continuous(limits = c(0,.08)) + scale_x_discrete(labels=c("0901_1000" = "AD 900 - 1000","1001_1200" = "AD 1001 - 1200","1201_1300" = "AD 1201 - 1300","1301_1400" = "AD 1301 - 1400", "1401_1540" = "AD 1401 - 1540")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 13), axis.title = element_text(size  = 14), legend.text = element_text(size = 13), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"),  legend.position = "none", plot.title = element_text(face = "bold", size = 16))
+anticor.neg 
+
+anticor.pos = ggplot(prcp.storage.anti, aes(x=factor(Period), y=anti.pos,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\nTransformation Period", y = "Positive Anticorrelation\n", title = "d) Positive Anticorrelation Values") + scale_y_continuous(limits = c(0,.1)) + scale_x_discrete(labels=c("0901_1000" = "AD 900 - 1000","1001_1200" = "AD 1001 - 1200","1201_1300" = "AD 1201 - 1300","1301_1400" = "AD 1301 - 1400", "1401_1540" = "AD 1401 - 1540")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 13), axis.title = element_text(size  = 14), legend.text = element_text(size = 13), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"),  legend.position = "none", plot.title = element_text(face = "bold", size = 16))
+anticor.pos
+
+storage = ggplot(prcp.storage.anti, aes(x=factor(Period), y=storage,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\nTransformation Period", y = "Storage Index\n", title = "b) Storage Stress") + scale_y_continuous(limits = c(0,.3)) + scale_x_discrete(labels=c("0901_1000" = "AD 900 - 1000","1001_1200" = "AD 1001 - 1200","1201_1300" = "AD 1201 - 1300","1301_1400" = "AD 1301 - 1400", "1401_1540" = "AD 1401 - 1540")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 13), axis.title = element_text(size  = 14), legend.text = element_text(size = 13), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"),  legend.position = "none", plot.title = element_text(face = "bold", size = 16))
+storage
+
+prcp = ggplot(prcp.storage.anti, aes(x=factor(Period), y=prcp,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\nTransformation Period", y = "Avg. Growing Season\n Precipitation (mm)", title = "a) Growing Season Precipitation") + scale_x_discrete(labels=c("0901_1000" = "AD 900 - 1000","1001_1200" = "AD 1001 - 1200","1201_1300" = "AD 1201 - 1300","1301_1400" = "AD 1301 - 1400", "1401_1540" = "AD 1401 - 1540")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 13), axis.title = element_text(size  = 14), legend.text = element_text(size = 13), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"),  legend.position = "none", plot.title = element_text(face = "bold", size = 16))
+prcp
+
+wild = ggplot(wild.data, aes(x=factor(Period), y=wild,fill=Site)) +
+  geom_boxplot(outlier.shape = NA) + theme_bw() + labs(x = "\n50-year Interval ", y = "Wild Plant Diversity\n", title = "c) Wild Plant Diversity") + scale_x_discrete(labels=c("0900_0949" = "AD 900 - 949","1050_1099" = "AD 1050 - 1099","1200_1249" = "AD 1200 - 1249","1250_1299" = "AD 1250 - 1299", "1300_1349" = "AD 1300 - 1349", "1350_1399" = "AD 1350 - 1399", "1500_1549" = "AD 1500 - 1549")) + scale_fill_brewer(palette="YlGnBu", labels = c("Fort Atarque", "Halona:wa North", "Hawikku", "Ojo Bonito", "Pueblos de los Muertos","Techado Springs")) + theme(axis.text = element_text(size = 13), axis.title = element_text(size  = 14), legend.text = element_text(size = 13), legend.title = element_text(size = 14), legend.background = element_rect(size=0.2, linetype="solid", colour = "black"),  legend.position = "none", plot.title = element_text(face = "bold", size = 16))
+wild
+
+
+jpeg("/Users/grantsnitker/Desktop/LTVTP_composite_graphs.jpeg", width = 11.5, height = 16, units = 'in', res = 300)
+plot_grid(prcp, storage, wild, anticor.pos, anticor.neg, nrow = 5, align = "v")
+dev.off()
+
+
+
+
+
+
+# jpeg("/Users/grantsnitker/Desktop/anticor_neg.jpeg", width = 12, height = 6, units = 'in', res = 300)
+# anticor.neg
+# dev.off()
+# 
+# jpeg("/Users/grantsnitker/Desktop/anticor_pos.jpeg", width = 12, height = 6, units = 'in', res = 300)
+# anticor.pos
+# dev.off()
+# 
+# jpeg("/Users/grantsnitker/Desktop/storage.jpeg", width = 12, height = 6, units = 'in', res = 300)
+# storage
+# dev.off()
+# 
+# jpeg("/Users/grantsnitker/Desktop/prcp.jpeg", width = 12, height = 6, units = 'in', res = 300)
+# prcp
+# dev.off()
+
+# jpeg("/Users/grantsnitker/Desktop/wild.jpeg", width = 12, height = 6, units = 'in', res = 300)
+# wild
+# dev.off()
