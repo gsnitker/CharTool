@@ -6,6 +6,6 @@ CharTool is a suite of macro tools for quantifying charcoal fragment metrics and
 
 Additionally, an Rstudio Project file and an R script are included for processing, visualizing, and preparing CharTool results for upload to the Global PaleoFire Database. 
 
-For questions, please contact Dr. Grant Snitker via email (grant.snitker@uga.edu). 
+For questions, please contact Dr. Grant Snitker via email (gsnitker@newmexicoconsortium.org). 
 
 Please feel welcome to modify the code of any of these modules, but please cite CharTool and ImageJ when using them.
